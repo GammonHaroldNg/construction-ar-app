@@ -47,7 +47,7 @@ const presetMarkers = [
   {
     lngLat: [114.1100, 22.3960],
     image: 'images/360-2.jpg',
-    thumbnail: 'images/thumb-2.jpg',
+    thumbnail: 'images/thumb-2.png',
     label: 'Site Center'
   }
 ];
