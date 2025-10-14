@@ -99,15 +99,17 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 document.getElementById('ghostRange').addEventListener('input', function() {
-  var value = this.value;
-  document.getElementById('sky360').setAttribute('material', 'opacity', value);
+  const opacityValue = this.value;
+  document.getElementById('sky360').setAttribute('material', 'opacity', opacityValue + "; side: double;");
 });
+
 
 function showViewer(imageSrc) {
   const viewer = document.getElementById('viewerContainer');
   viewer.style.display = "block";
   document.getElementById('sky360').setAttribute('src', imageSrc);
-  document.getElementById('sky360').setAttribute('material', 'opacity', 1); // Reset each time
+  document.getElementById('sky360').setAttribute('material', 'opacity', '1; side: double;');
   document.getElementById('ghostRange').value = 1;
 }
+
 
