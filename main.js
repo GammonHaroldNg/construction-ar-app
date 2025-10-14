@@ -4,8 +4,12 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyb2xkbmciLCJhIjoiY21ncTRkcG9wMDE5NTJqcHhmM
 // Initialize the map (adjust center & zoom to your site)
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/light-v11',
-  center: [114.1095, 22.3964], // Example: Hong Kong; change to your location
+  style: {
+    "version": 8,
+    "sources": {},
+    "layers": []
+  },
+  center: [114.1095, 22.3964],
   zoom: 17
 });
 
@@ -32,19 +36,34 @@ map.on('load', () => {
 // Array to store markers (optionally with related 360 image info)
 let markers = [];
 
-// Add marker on map click
-map.on('click', function(e) {
-  const marker = new mapboxgl.Marker({ draggable: true })
-    .setLngLat(e.lngLat)
+// Define an array of preset markers, each with coordinates and image filename
+const presetMarkers = [
+  {
+    lngLat: [114.1090, 22.3968],  // Example 1: adjust to your real coordinates
+    image: 'images/360-1.jpg',
+    label: 'Main Entrance'
+  },
+  {
+    lngLat: [114.1100, 22.3960],  // Example 2: adjust
+    image: 'images/360-2.jpg',
+    label: 'Site Center'
+  }
+];
+
+// Add markers to the map, each with a popup (label) and image association
+presetMarkers.forEach(markerData => {
+  const marker = new mapboxgl.Marker()
+    .setLngLat(markerData.lngLat)
+    .setPopup(new mapboxgl.Popup().setText(markerData.label))
     .addTo(map);
 
-  // You can associate a 360 image filename with this marker later!
-  marker._imageFileName = null; // Placeholder
-  markers.push(marker);
+  // Store the image file name in the marker for later use
+  marker._imageFileName = markerData.image;
 
-  // For now, show simple popup
-  marker.setPopup(new mapboxgl.Popup().setText('New marker placed here!')).togglePopup();
-
-  // Optionally: Display marker coordinates in the console for reference
-  console.log('Marker placed at: ', e.lngLat);
+  // (Optionally) Add a click event to the marker for loading the 360 image:
+  marker.getElement().addEventListener('click', function() {
+    // TODO: Code for loading marker._imageFileName in the A-Frame viewer here
+    alert('Would load image: ' + marker._imageFileName);
+  });
 });
+
