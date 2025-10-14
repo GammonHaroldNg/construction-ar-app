@@ -13,7 +13,7 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   map.addSource('site', {
     'type': 'image',
-    'url': 'image.jpg',
+    'url': 'images/siteplan.png',
     'coordinates': [
       [114.1085, 22.3972], // top left (lng, lat)
       [114.1105, 22.3972], // top right
