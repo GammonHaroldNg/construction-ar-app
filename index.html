@@ -4,13 +4,12 @@
   <meta charset="UTF-8" />
   <title>Construction AR App</title>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-  <style>
-    body { margin: 0; padding: 0; }
-    #map { width: 100vw; height: 60vh; }
-    #viewerContainer { position: relative; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <style>
+    #map { width: 100vw; height: 60vh; }
+  </style>
 </head>
 <body>
   <div id="map"></div>
@@ -18,8 +17,9 @@
     <a-scene embedded id="aScene">
       <a-sky id="sky360" src="" rotation="0 0 0"></a-sky>
     </a-scene>
-    <button onclick="closeViewer()" style="position:absolute; top:10px; right:10px;">Close Viewer</button>
+    <button onclick="closeViewer()" style="position:absolute;top:10px;right:10px;">Close Viewer</button>
   </div>
   <script src="main.js"></script>
 </body>
 </html>
+
