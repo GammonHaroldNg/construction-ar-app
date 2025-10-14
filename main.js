@@ -41,7 +41,7 @@ const presetMarkers = [
   {
     lngLat: [114.1090, 22.3968],
     image: 'images/360-1.jpg',
-    thumbnail: 'images/thumb-1.jpg',
+    thumbnail: 'images/thumb-1.png',
     label: 'Main Entrance'
   },
   {
