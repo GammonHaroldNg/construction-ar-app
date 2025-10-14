@@ -78,10 +78,22 @@ presetMarkers.forEach(markerData => {
       const btn = document.getElementById(btnId);
       if (btn) {
         btn.onclick = () => {
-          // Replace this with logic to trigger 360 viewer for marker._imageFileName
-          alert('Would load image: ' + marker._imageFileName);
+          // Use showViewer with your 360 image filename
+          showViewer(marker._imageFileName);
         };
       }
     }, 100);
   });
 });
+
+// Function to show viewer and set image
+function showViewer(imageSrc) {
+  document.getElementById('viewerContainer').style.display = "block";
+  document.getElementById('sky360').setAttribute('src', imageSrc);
+}
+
+// Function to close viewer
+function closeViewer() {
+  document.getElementById('viewerContainer').style.display = "none";
+}
+
