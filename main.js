@@ -1,5 +1,7 @@
+// Replace with your own free Mapbox access token!
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyb2xkbmciLCJhIjoiY21ncTRkcG9wMDE5NTJqcHhmMDUzYWxmNSJ9.5clGvHOhvwTRx2z9lwNAkA';
 
+// Initialize the map with a blank style so only the overlay image is visible
 const map = new mapboxgl.Map({
   container: 'map',
   style: { "version": 8, "sources": {}, "layers": [] },
@@ -7,15 +9,16 @@ const map = new mapboxgl.Map({
   zoom: 17
 });
 
+// Overlay a site plan image (adjust coordinates as needed)
 map.on('load', () => {
   map.addSource('site', {
     'type': 'image',
-    'url': 'images/siteplan.png',
+    'url': 'images/siteplan.png', // Change to your site plan image if needed
     'coordinates': [
-      [114.1085, 22.3972],
-      [114.1105, 22.3972],
-      [114.1105, 22.3956],
-      [114.1085, 22.3956]
+      [114.1085, 22.3972], // top left (lng, lat)
+      [114.1105, 22.3972], // top right
+      [114.1105, 22.3956], // bottom right
+      [114.1085, 22.3956]  // bottom left
     ]
   });
   map.addLayer({
@@ -26,6 +29,7 @@ map.on('load', () => {
   });
 });
 
+// Preset markers for 360 locations
 const presetMarkers = [
   {
     lngLat: [114.1090, 22.3968],
@@ -41,6 +45,7 @@ const presetMarkers = [
   }
 ];
 
+// Add preset markers and popups
 presetMarkers.forEach(markerData => {
   const marker = new mapboxgl.Marker()
     .setLngLat(markerData.lngLat)
@@ -71,10 +76,24 @@ presetMarkers.forEach(markerData => {
 });
 
 function showViewer(imageSrc) {
-  document.getElementById('viewerContainer').style.display = "block";
+  const viewer = document.getElementById('viewerContainer');
+  viewer.style.display = "block";
   document.getElementById('sky360').setAttribute('src', imageSrc);
 }
+
 function closeViewer() {
-  document.getElementById('viewerContainer').style.display = "none";
+  const viewer = document.getElementById('viewerContainer');
+  viewer.style.display = "none";
   document.getElementById('sky360').setAttribute('src', "");
 }
+
+// Workaround: Pre-initialize the A-Frame/WebGL viewer when the DOM is loaded
+window.addEventListener('DOMContentLoaded', function() {
+  const viewer = document.getElementById('viewerContainer');
+  viewer.style.display = "block";
+  viewer.style.opacity = "0";
+  setTimeout(function() {
+    viewer.style.display = "none";
+    viewer.style.opacity = "1";
+  }, 500);
+});
