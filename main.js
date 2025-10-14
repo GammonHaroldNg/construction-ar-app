@@ -28,3 +28,23 @@ map.on('load', () => {
     'paint': { 'raster-opacity': 0.85 }
   });
 });
+
+// Array to store markers (optionally with related 360 image info)
+let markers = [];
+
+// Add marker on map click
+map.on('click', function(e) {
+  const marker = new mapboxgl.Marker({ draggable: true })
+    .setLngLat(e.lngLat)
+    .addTo(map);
+
+  // You can associate a 360 image filename with this marker later!
+  marker._imageFileName = null; // Placeholder
+  markers.push(marker);
+
+  // For now, show simple popup
+  marker.setPopup(new mapboxgl.Popup().setText('New marker placed here!')).togglePopup();
+
+  // Optionally: Display marker coordinates in the console for reference
+  console.log('Marker placed at: ', e.lngLat);
+});
