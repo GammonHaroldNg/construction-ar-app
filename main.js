@@ -97,3 +97,17 @@ window.addEventListener('DOMContentLoaded', function() {
     viewer.style.opacity = "1";
   }, 500);
 });
+
+document.getElementById('ghostRange').addEventListener('input', function() {
+  var value = this.value;
+  document.getElementById('sky360').setAttribute('material', 'opacity', value);
+});
+
+function showViewer(imageSrc) {
+  const viewer = document.getElementById('viewerContainer');
+  viewer.style.display = "block";
+  document.getElementById('sky360').setAttribute('src', imageSrc);
+  document.getElementById('sky360').setAttribute('material', 'opacity', 1); // Reset each time
+  document.getElementById('ghostRange').value = 1;
+}
+
