@@ -81,12 +81,16 @@ function showViewer(imageSrc) {
   document.getElementById('sky360').setAttribute('src', imageSrc);
   document.getElementById('sky360').setAttribute('material', 'opacity: 1; transparent: true; side: double;');
   document.getElementById('ghostRange').value = 1;
+  document.getElementById('ghostSliderBox').style.display = "flex";
+
 }
 
 function closeViewer() {
   const viewer = document.getElementById('viewerContainer');
   viewer.style.display = "none";
   document.getElementById('sky360').setAttribute('src', "");
+  document.getElementById('ghostSliderBox').style.display = "none";
+
 }
 
 // Ghost mode slider - update opacity
