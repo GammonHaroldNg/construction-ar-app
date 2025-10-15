@@ -33,7 +33,7 @@ map.on('load', () => {
 const presetMarkers = [
   {
     lngLat: [114.1090, 22.3968],
-    image: 'images/360-1.jpg',
+    image: 'images/360-1.png',
     thumbnail: 'images/thumb-1.png',
     label: 'Main Entrance'
   },
