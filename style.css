@@ -35,14 +35,3 @@
   margin-top: 6px;
 }
 
-@media (max-width: 400px) {
-  #ghostSliderBox {
-    width: 98vw;
-    max-width: none;
-    padding: 2vw;
-    font-size: 1em;
-  }
-  #viewerContainer {
-    padding-bottom: 80px;
-  }
-}
