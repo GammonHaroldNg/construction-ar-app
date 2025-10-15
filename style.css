@@ -41,7 +41,26 @@
   margin-top: 6px;
 }
 
+/* Viewer container responsive overflow, padding */
+#viewerContainer {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+  overflow: auto;
+  padding-bottom: 60px;
+}
+
 @media (max-width: 400px) {
+  #ghostSliderBox {
+    width: 98vw;
+    max-width: none;
+    padding: 2vw;
+    font-size: 1em;
+  }
   #viewerContainer {
     padding-bottom: 80px;
   }
