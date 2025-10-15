@@ -1,7 +1,7 @@
 // Replace with your own free Mapbox access token!
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyb2xkbmciLCJhIjoiY21ncTRkcG9wMDE5NTJqcHhmMDUzYWxmNSJ9.5clGvHOhvwTRx2z9lwNAkA';
 
-// Initialize the map with a blank style so only the overlay image is visible
+// Initialize the map - show only the overlay image
 const map = new mapboxgl.Map({
   container: 'map',
   style: { "version": 8, "sources": {}, "layers": [] },
@@ -13,7 +13,7 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   map.addSource('site', {
     'type': 'image',
-    'url': 'images/siteplan.png', // Change to your site plan image if needed
+    'url': 'images/siteplan.png',
     'coordinates': [
       [114.1085, 22.3972], // top left (lng, lat)
       [114.1105, 22.3972], // top right
@@ -79,6 +79,8 @@ function showViewer(imageSrc) {
   const viewer = document.getElementById('viewerContainer');
   viewer.style.display = "block";
   document.getElementById('sky360').setAttribute('src', imageSrc);
+  document.getElementById('sky360').setAttribute('material', 'opacity: 1; transparent: true; side: double;');
+  document.getElementById('ghostRange').value = 1;
 }
 
 function closeViewer() {
@@ -87,7 +89,13 @@ function closeViewer() {
   document.getElementById('sky360').setAttribute('src', "");
 }
 
-// Workaround: Pre-initialize the A-Frame/WebGL viewer when the DOM is loaded
+// Ghost mode slider - update opacity
+document.getElementById('ghostRange').addEventListener('input', function() {
+  const opacityValue = this.value;
+  document.getElementById('sky360').setAttribute('material', `opacity: ${opacityValue}; transparent: true; side: double;`);
+});
+
+// Workaround: Pre-initialize the viewer for mobile and desktop
 window.addEventListener('DOMContentLoaded', function() {
   const viewer = document.getElementById('viewerContainer');
   viewer.style.display = "block";
@@ -97,19 +105,3 @@ window.addEventListener('DOMContentLoaded', function() {
     viewer.style.opacity = "1";
   }, 500);
 });
-
-document.getElementById('ghostRange').addEventListener('input', function() {
-  const opacityValue = this.value;
-  document.getElementById('sky360').setAttribute('material', 'opacity', opacityValue + "; side: double;");
-});
-
-
-function showViewer(imageSrc) {
-  const viewer = document.getElementById('viewerContainer');
-  viewer.style.display = "block";
-  document.getElementById('sky360').setAttribute('src', imageSrc);
-  document.getElementById('sky360').setAttribute('material', 'opacity', '1; side: double;');
-  document.getElementById('ghostRange').value = 1;
-}
-
-
