@@ -13,7 +13,7 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   map.addSource('site', {
     'type': 'image',
-    'url': 'images/siteplan.png',
+    'url': 'images/ET_3F_Lift_Lobby.png',
     'coordinates': [
       [114.1085, 22.3972], // top left (lng, lat)
       [114.1105, 22.3972], // top right
@@ -39,7 +39,7 @@ const presetMarkers = [
   },
   {
     lngLat: [114.1100, 22.3960],
-    image: 'images/360-2.jpg',
+    image: 'images/360-2.png',
     thumbnail: 'images/thumb-2.png',
     label: 'Site Center'
   }
