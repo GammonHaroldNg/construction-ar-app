@@ -48,7 +48,7 @@ const presetMarkers = [
     image: 'images/3F-Lobby-A.png',
     thumbnail: 'images/thumb-Lobby-A.png',
     label: 'Lobby 2'
-  }
+  },
   {
     lngLat: [114.1100, 22.3960],
     image: 'images/3F-Lobby-D.png',
