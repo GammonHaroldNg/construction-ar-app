@@ -6,14 +6,14 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: { "version": 8, "sources": {}, "layers": [] },
   center: [114.1095, 22.3964],
-  zoom: 20
+  zoom: 19
 });
 
 // Overlay a site plan image (adjust coordinates as needed)
 map.on('load', () => {
   map.addSource('site', {
     'type': 'image',
-    'url': 'images/ET_3F_Lift_Lobby.png',
+    'url': 'images/GT-Core-Plan.png',
     'coordinates': [
       [114.1085, 22.3972], // top left (lng, lat)
       [114.1105, 22.3972], // top right
@@ -33,15 +33,27 @@ map.on('load', () => {
 const presetMarkers = [
   {
     lngLat: [114.1090, 22.3968],
-    image: 'images/360-1.png',
-    thumbnail: 'images/thumb-1.png',
-    label: 'Main Entrance'
+    image: 'images/3F-Lobby-B.png',
+    thumbnail: 'images/thumb-Lobby-B.png',
+    label: 'Lobby 1'
   },
   {
+    lngLat: [114.1090, 22.3960],
+    image: 'images/3F-Lobby-C.png',
+    thumbnail: 'images/thumb-Lobby-C.png',
+    label: 'Lobby 3'
+  },
+  {
+    lngLat: [114.1100, 22.3968],
+    image: 'images/3F-Lobby-A.png',
+    thumbnail: 'images/thumb-Lobby-A.png',
+    label: 'Lobby 2'
+  }
+  {
     lngLat: [114.1100, 22.3960],
-    image: 'images/360-2.png',
-    thumbnail: 'images/thumb-2.png',
-    label: 'Site Center'
+    image: 'images/3F-Lobby-D.png',
+    thumbnail: 'images/thumb-Lobby-D.png',
+    label: 'Lobby 4'
   }
 ];
 
