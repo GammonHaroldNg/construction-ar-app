@@ -56,17 +56,17 @@ const presetMarkers = [
     label: 'Lobby 4'
   },
     {
-    lngLat: [114.10970, 22.3950],
+    lngLat: [114.10970, 22.3955],
     image: 'images/3F-06.png',
     label: 'Floor Platten'
   },
     {
-    lngLat: [114.10980, 22.3950],
+    lngLat: [114.10975, 22.3955],
     image: 'images/QRC-Facade-Day.png',
     label: 'QRC Facade Day Time'
   },
     {
-    lngLat: [114.10990, 22.3950],
+    lngLat: [114.10980, 22.3955],
     image: 'images/QRC-Facade-Night.png',
     label: 'QRC Facade Night Time'
   }
