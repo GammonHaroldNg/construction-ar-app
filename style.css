@@ -1,15 +1,19 @@
-#viewerContainer {
-  display: none;
-  position: fixed;
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#map {
+  position: absolute;
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.85);
-  z-index: 9999;
-  overflow: auto;
-  padding-bottom: 60px;
+  margin: 0;
+  z-index: 0;
 }
-
-#map {
-  z-index: 1;
+.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib {
+  display: none !important;
 }
