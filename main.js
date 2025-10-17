@@ -32,7 +32,7 @@ map.on('load', () => {
 // Preset markers for 360 locations
 const presetMarkers = [
   {
-    lngLat: [114.1090, 22.3965],
+    lngLat: [114.1090, 22.3966],
     image: 'images/3F-Lobby-A.png',
     thumbnail: 'images/thumb-Lobby-A.png',
     label: 'Lobby 1'
@@ -44,7 +44,7 @@ const presetMarkers = [
     label: 'Lobby 3'
   },
   {
-    lngLat: [114.1098, 22.3965],
+    lngLat: [114.1098, 22.3966],
     image: 'images/3F-Lobby-B.png',
     thumbnail: 'images/thumb-Lobby-B.png',
     label: 'Lobby 2'
