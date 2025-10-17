@@ -71,7 +71,7 @@ presetMarkers.forEach(markerData => {
       <button>View 360</button>
       </a>
     </div>
-  `;}
+  `;
   const popup = new mapboxgl.Popup().setHTML(popupContent);
   marker.setPopup(popup);
 
