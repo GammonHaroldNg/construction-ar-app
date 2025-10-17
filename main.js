@@ -6,7 +6,7 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: { "version": 8, "sources": {}, "layers": [] },
   center: [114.1095, 22.3964],
-  zoom: 19
+  zoom: 20
 });
 
 // Overlay a site plan image (adjust coordinates as needed)
@@ -55,7 +55,9 @@ presetMarkers.forEach(markerData => {
     <div style="text-align:center;">
       <strong>${markerData.label}</strong><br>
       <img src="${markerData.thumbnail}" alt="thumbnail" width="120" style="margin:8px 0;display:block;" />
-      <button id="view360-${markerData.lngLat[0]}-${markerData.lngLat[1]}">View 360°</button>
+      <a href="viewer.html?img=${encodeURIComponent(markerData.image)}" target="_blank">
+      <button>View 360</button>
+      </a>
     </div>
   `;
   const popup = new mapboxgl.Popup().setHTML(popupContent);
