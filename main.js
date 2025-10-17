@@ -32,27 +32,27 @@ map.on('load', () => {
 // Preset markers for 360 locations
 const presetMarkers = [
   {
-    lngLat: [114.1090, 22.3968],
-    image: 'images/3F-Lobby-B.png',
-    thumbnail: 'images/thumb-Lobby-B.png',
+    lngLat: [114.1091, 22.3965],
+    image: 'images/3F-Lobby-A.png',
+    thumbnail: 'images/thumb-Lobby-A.png',
     label: 'Lobby 1'
   },
   {
-    lngLat: [114.1090, 22.3960],
-    image: 'images/3F-Lobby-C.png',
-    thumbnail: 'images/thumb-Lobby-C.png',
+    lngLat: [114.1091, 22.3960],
+    image: 'images/3F-Lobby-D.png',
+    thumbnail: 'images/thumb-Lobby-D.png',
     label: 'Lobby 3'
   },
   {
-    lngLat: [114.1100, 22.3968],
-    image: 'images/3F-Lobby-A.png',
-    thumbnail: 'images/thumb-Lobby-A.png',
+    lngLat: [114.1098, 22.3965],
+    image: 'images/3F-Lobby-B.png',
+    thumbnail: 'images/thumb-Lobby-B.png',
     label: 'Lobby 2'
   },
   {
-    lngLat: [114.1100, 22.3960],
-    image: 'images/3F-Lobby-D.png',
-    thumbnail: 'images/thumb-Lobby-D.png',
+    lngLat: [114.1098, 22.3960],
+    image: 'images/3F-Lobby-C.png',
+    thumbnail: 'images/thumb-Lobby-C.png',
     label: 'Lobby 4'
   }
 ];
