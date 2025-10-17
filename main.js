@@ -6,7 +6,7 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: { "version": 8, "sources": {}, "layers": [] },
   center: [114.1095, 22.3964],
-  zoom: 17
+  zoom: 19
 });
 
 // Overlay a site plan image (adjust coordinates as needed)
