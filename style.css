@@ -1,3 +1,45 @@
+#topBanner {
+  position: fixed;
+  top: 0; left: 0; width: 100vw;
+  height: 60px;
+  background: #1274AA;
+  color: white;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.banner-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-left: 32px;
+}
+
+#bottomBanner {
+  position: fixed;
+  bottom: 0; left: 0; width: 100vw;
+  height: 60px;
+  background: #033046;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 32px;
+  z-index: 10;
+}
+.logo-img {
+  height: 42px;
+  width: auto;
+}
+
+#map {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  z-index: 1;
+}
+
+/* Prevent map from hiding banner click events */
 html, body {
   height: 100%;
   width: 100%;
@@ -5,13 +47,7 @@ html, body {
   padding: 0;
   box-sizing: border-box;
 }
-#map {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-}
+
 .mapboxgl-ctrl-logo,
 .mapboxgl-ctrl-attrib {
   display: none !important;
