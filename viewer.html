@@ -32,14 +32,13 @@
   <div id="instructions">
     <b>How to align:</b><br>
     <ul>
-      <li>Drag with one finger to rotate the rendering</li>
+      <li>Drag with one finger to rotate left/right AND up/down</li>
       <li>Pinch/expand with two fingers to zoom in/out</li>
-      <li>Tap Lock/Unlock to toggle manual alignment</li>
+      <li>Tap Lock/Unlock to restrict or allow manual alignment</li>
       <li>Tap Gyroscope On/Off any time</li>
       <li>Ghost Mode: see-through rendering overlay</li>
     </ul>
   </div>
-  <!-- WebGL alpha enabled for transparent background -->
   <a-scene embedded vr-mode-ui="enabled: false" renderer="alpha:true;">
     <a-entity 
       id="sky360"
@@ -104,11 +103,12 @@
       unlockBtn.disabled = true;
     });
 
-    // Mobile gestures: pinch/expend = zoom in/out (natural direction), drag = rotate
-    let lastTouchX = null, lastRotationY = 0;
+    // Touch gestures: rotate left/right AND up/down, pinch/expand = zoom in/out
+    let lastTouchX = null, lastTouchY = null;
     let initialPinchDist = null, initialScale = -1;
     let sphereScale = -1;   // Start at -1 for correct orientation
-    let rotationY = 0;
+    let rotationY = 0; // left/right
+    let rotationX = 0; // up/down
 
     function safeScale(val) {
       // Clamp value between -2 and -0.3 for reasonable zoom range
@@ -120,6 +120,7 @@
       if (controlsLocked) return;
       if (e.touches.length === 1) {
         lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
       }
       if (e.touches.length === 2) {
         initialPinchDist = Math.hypot(
@@ -132,12 +133,17 @@
 
     aScene.addEventListener('touchmove', function(e){
       if (controlsLocked) return;
-      // One finger: rotate horizontally
-      if (e.touches.length === 1 && lastTouchX!==null) {
+      // One finger: rotate horizontally and vertically
+      if (e.touches.length === 1 && lastTouchX!==null && lastTouchY!==null) {
         let deltaX = e.touches[0].clientX - lastTouchX;
-        rotationY += deltaX * 0.25;    // Adjust sensitivity as needed
-        skyEl.setAttribute("rotation", `0 ${rotationY} 0`);
+        let deltaY = e.touches[0].clientY - lastTouchY;
+        rotationY += deltaX * 0.25;    // left/right
+        rotationX += deltaY * 0.25;    // up/down
+        // Clamp pitch to avoid flipping
+        rotationX = Math.max(-90, Math.min(90, rotationX));
+        skyEl.setAttribute("rotation", `${rotationX} ${rotationY} 0`);
         lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
       }
       // Two fingers: pinch/expand (zoom out/in)
       if (e.touches.length === 2 && initialPinchDist!==null) {
@@ -146,13 +152,14 @@
           e.touches[0].clientY - e.touches[1].clientY
         );
         let scaleFactor = newDist / initialPinchDist;
-        sphereScale = safeScale(initialScale * (1/scaleFactor)); // Expanding = bigger, Pinch = smaller
+        sphereScale = safeScale(initialScale * scaleFactor); // Expanding = bigger, Pinch = smaller
         skyEl.setAttribute("scale", `${sphereScale} 1 1`);
       }
     });
 
     aScene.addEventListener('touchend', function(e){
       lastTouchX = null;
+      lastTouchY = null;
       initialPinchDist = null;
     });
   </script>
