@@ -6,26 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <style>
-    html, body { height: 100%; margin: 0; background: #000; }
+    html, body { height: 100%; margin: 0; background: #000; overflow: hidden; }
+    #videoBg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      background: #000;
+    }
     #backBtn { position: absolute; top: 20px; left: 20px; z-index: 2; }
     #ghostToggle { position: absolute; top: 90px; left: 20px; z-index: 2; }
     #ghostLabel  { position: absolute; top: 70px; left: 20px; z-index: 2; color: white; font-weight: bold; }
+    a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1;}
   </style>
 </head>
 <body>
+  <video id="videoBg" autoplay muted playsinline></video>
   <button id="backBtn" onclick="history.back()">Back</button>
   <label id="ghostLabel" for="ghostToggle">Ghost Mode</label>
   <input type="range" id="ghostToggle" min="0.2" max="1" step="0.01" value="1">
 
-  <a-scene embedded>
-    <a-sky id="sky360" src="images/360-1.png" material="opacity: 1"></a-sky>
+  <a-scene embedded vr-mode-ui="enabled: false">
+    <a-entity 
+      id="sky360"
+      geometry="primitive: sphere; radius: 5000; segmentsWidth: 64; segmentsHeight: 64;"
+      material="side: back; src: images/360-1.jpg; opacity: 1"
+      scale="-1 1 1">
+    </a-entity>
+    <a-camera position="0 0 0"></a-camera>
   </a-scene>
   <script>
+    // Start camera stream
+    const video = document.getElementById('videoBg');
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => { video.srcObject = stream; })
+        .catch(err => { alert('Camera access denied or unavailable.'); });
+    } else {
+      alert('Camera API not supported.');
+    }
+
     // Get image path from URL parameter
     const params = new URLSearchParams(location.search);
-    const imgSrc = params.get("img") || "images/360-1.png";
+    const imgSrc = params.get("img") || "images/360-1.jpg";
     const skyEl = document.getElementById("sky360");
-    skyEl.setAttribute("src", imgSrc);
+    skyEl.setAttribute("material", "src", imgSrc);
+    skyEl.setAttribute("material", "opacity", 1);
 
     // Ghost Mode Opacity Control
     document.getElementById("ghostToggle").addEventListener("input", function(e) {
