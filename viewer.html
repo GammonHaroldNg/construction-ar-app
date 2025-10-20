@@ -12,7 +12,7 @@
     #ghostToggle { position: absolute; top: 90px; left: 20px; z-index: 2; }
     #ghostLabel  { position: absolute; top: 70px; left: 20px; z-index: 2; color: white; font-weight: bold; }
     #controls { position: absolute; top: 140px; left: 20px; z-index: 2; display: flex; flex-direction: column; gap: 10px; }
-    a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1;}
+    a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: #000 !important;}
     .ctrl-btn { font-size: 1.1em; padding: 6px 14px; border-radius: 4px; background: #274AA1; color: white; border: none; cursor: pointer; }
     .ctrl-btn:disabled { background: #888; cursor: default; }
     #instructions { position: absolute; bottom: 25px; left: 20px; z-index: 2; color: #fff; background:rgba(0,0,0,0.5); padding:8px 15px; border-radius:6px; font-size:1em; }
@@ -37,7 +37,7 @@
       <li>Gyroscope follows device movement after locking</li>
     </ul>
   </div>
-  <a-scene embedded vr-mode-ui="enabled: false">
+  <a-scene embedded vr-mode-ui="enabled: false" background="color: #000">
     <a-entity 
       id="sky360"
       geometry="primitive: sphere; radius: 5000; segmentsWidth: 64; segmentsHeight: 64;"
@@ -48,7 +48,7 @@
     <a-camera id="mainCamera" position="0 0 0" look-controls></a-camera>
   </a-scene>
   <script>
-    // Start camera stream
+    // Start camera stream as video background
     const video = document.getElementById('videoBg');
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
@@ -86,13 +86,19 @@
       unlockBtn.disabled = true;
     });
 
-    // Touch gesture logic for rotation and pinch zoom
+    // --- Mobile Gesture Logic for Rotation and Zoom --- //
     let lastTouchX = null, lastRotationY = 0;
     let initialPinchDist = null, initialScale = -1;
-    let sphereScale = -1;
+    let sphereScale = -1;   // Start at -1 for correct orientation
     let rotationY = 0;
 
+    // Pinch gesture: always scale X negative, Y positive
+    function safeScale(val) {
+      // Clamp value between -2 and -0.3 for reasonable zoom range
+      return Math.max(-2, Math.min(-0.3, val));
+    }
     const aScene = document.querySelector('a-scene');
+
     aScene.addEventListener('touchstart', function(e){
       if (controlsLocked) return;
       if (e.touches.length === 1) {
@@ -109,23 +115,22 @@
 
     aScene.addEventListener('touchmove', function(e){
       if (controlsLocked) return;
-      // One finger = rotate
+      // One finger: rotate horizontally
       if (e.touches.length === 1 && lastTouchX!==null) {
         let deltaX = e.touches[0].clientX - lastTouchX;
-        // Increase Y rotation proportionally (calibrate sensitivity as desired)
-        rotationY += deltaX * 0.25;
+        rotationY += deltaX * 0.25;    // Adjust sensitivity as needed
         skyEl.setAttribute("rotation", `0 ${rotationY} 0`);
         lastTouchX = e.touches[0].clientX;
       }
-      // Two fingers = pinch zoom
+      // Two fingers: pinch zoom in/out
       if (e.touches.length === 2 && initialPinchDist!==null) {
         let newDist = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
         );
         let scaleFactor = newDist / initialPinchDist;
-        sphereScale = Math.max(-2, Math.min(-0.3, initialScale * scaleFactor));
-        skyEl.setAttribute("scale", `${sphereScale} ${sphereScale} 1`);
+        sphereScale = safeScale(initialScale * scaleFactor);
+        skyEl.setAttribute("scale", `${sphereScale} 1 1`); // X axis: negative, Y axis: always positive 1
       }
     });
 
