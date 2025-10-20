@@ -12,7 +12,7 @@
     #ghostToggle { position: absolute; top: 90px; left: 20px; z-index: 2; }
     #ghostLabel  { position: absolute; top: 70px; left: 20px; z-index: 2; color: white; font-weight: bold; }
     #controls { position: absolute; top: 140px; left: 20px; z-index: 2; display: flex; flex-direction: column; gap: 10px; }
-    a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: #000 !important;}
+    a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: transparent !important;}
     .ctrl-btn { font-size: 1.1em; padding: 6px 14px; border-radius: 4px; background: #274AA1; color: white; border: none; cursor: pointer; }
     .ctrl-btn:disabled { background: #888; cursor: default; }
     #instructions { position: absolute; bottom: 25px; left: 20px; z-index: 2; color: #fff; background:rgba(0,0,0,0.5); padding:8px 15px; border-radius:6px; font-size:1em; }
@@ -37,7 +37,8 @@
       <li>Gyroscope follows device movement after locking</li>
     </ul>
   </div>
-  <a-scene embedded vr-mode-ui="enabled: false" background="color: #000">
+  <!-- WebGL alpha enabled for transparent background -->
+  <a-scene embedded vr-mode-ui="enabled: false" renderer="alpha:true;">
     <a-entity 
       id="sky360"
       geometry="primitive: sphere; radius: 5000; segmentsWidth: 64; segmentsHeight: 64;"
@@ -45,7 +46,7 @@
       scale="-1 1 1"
       rotation="0 0 0"
     ></a-entity>
-    <a-camera id="mainCamera" position="0 0 0" look-controls></a-camera>
+    <a-camera id="mainCamera" position="0 0 0" look-controls="enabled: false;"></a-camera>
   </a-scene>
   <script>
     // Start camera stream as video background
@@ -58,14 +59,14 @@
       alert('Camera API not supported.');
     }
 
-    // Get image path from URL parameter
+    // Set up references
     const params = new URLSearchParams(location.search);
     const imgSrc = params.get("img") || "images/360-1.jpg";
     const skyEl = document.getElementById("sky360");
     skyEl.setAttribute("material", "src", imgSrc);
     skyEl.setAttribute("material", "opacity", 1);
 
-    // Ghost Mode Opacity Control
+    // Ghost Mode Opacity Control: Enables AR "see-through" effect
     document.getElementById("ghostToggle").addEventListener("input", function(e) {
       skyEl.setAttribute('material', 'opacity', parseFloat(e.target.value));
     });
@@ -74,16 +75,22 @@
     let controlsLocked = false;
     const lockBtn = document.getElementById("lockAlign");
     const unlockBtn = document.getElementById("unlockAlign");
+    const cameraEl = document.getElementById("mainCamera");
+
     lockBtn.addEventListener("click", function() {
       controlsLocked = true;
       lockBtn.disabled = true;
       unlockBtn.disabled = false;
+      // Enable gyroscope camera controls, disable manual gestures
+      cameraEl.setAttribute("look-controls", "enabled: true; touchEnabled: false;");
       alert("Alignment locked! Now move your phone to view the design with gyroscope.");
     });
     unlockBtn.addEventListener("click", function() {
       controlsLocked = false;
       lockBtn.disabled = false;
       unlockBtn.disabled = true;
+      // Disable gyro camera controls, re-enable gestures
+      cameraEl.setAttribute("look-controls", "enabled: false;");
     });
 
     // --- Mobile Gesture Logic for Rotation and Zoom --- //
@@ -92,7 +99,6 @@
     let sphereScale = -1;   // Start at -1 for correct orientation
     let rotationY = 0;
 
-    // Pinch gesture: always scale X negative, Y positive
     function safeScale(val) {
       // Clamp value between -2 and -0.3 for reasonable zoom range
       return Math.max(-2, Math.min(-0.3, val));
@@ -130,7 +136,7 @@
         );
         let scaleFactor = newDist / initialPinchDist;
         sphereScale = safeScale(initialScale * scaleFactor);
-        skyEl.setAttribute("scale", `${sphereScale} 1 1`); // X axis: negative, Y axis: always positive 1
+        skyEl.setAttribute("scale", `${sphereScale} 1 1`);
       }
     });
 
