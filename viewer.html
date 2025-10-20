@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>360 Viewer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <style>
-    html, body { height: 100%; margin: 0; }
-    body { background: #000; }
+    html, body { height: 100%; margin: 0; background: #000; }
     #backBtn { position: absolute; top: 20px; left: 20px; z-index: 2; }
+    #ghostToggle { position: absolute; top: 90px; left: 20px; z-index: 2; }
+    #ghostLabel  { position: absolute; top: 70px; left: 20px; z-index: 2; color: white; font-weight: bold; }
   </style>
 </head>
 <body>
-  <button id="backBtn" onclick="history.back();">Back</button>
-  <label for="ghostToggle" style="position:absolute;top:70px;left:20px;z-index:2;color:white;">Ghost Mode</label>
-  <input type="range" id="ghostToggle" min="0.2" max="1" step="0.01" value="1" style="position:absolute;top:90px;left:20px;z-index:2;">
+  <button id="backBtn" onclick="history.back()">Back</button>
+  <label id="ghostLabel" for="ghostToggle">Ghost Mode</label>
+  <input type="range" id="ghostToggle" min="0.2" max="1" step="0.01" value="1">
+
   <a-scene embedded>
     <a-sky id="sky360" src="images/360-1.png" material="opacity: 1"></a-sky>
   </a-scene>
