@@ -152,7 +152,7 @@
           e.touches[0].clientY - e.touches[1].clientY
         );
         let scaleFactor = newDist / initialPinchDist;
-        sphereScale = safeScale(initialScale * scaleFactor); // Expanding = bigger, Pinch = smaller
+        sphereScale = safeScale(initialScale * (1/scaleFactor)); // Expanding = bigger, Pinch = smaller
         skyEl.setAttribute("scale", `${sphereScale} 1 1`);
       }
     });
