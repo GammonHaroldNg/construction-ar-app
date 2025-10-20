@@ -27,6 +27,7 @@
   <div id="controls">
     <button class="ctrl-btn" id="lockAlign">Lock Alignment</button>
     <button class="ctrl-btn" id="unlockAlign" disabled>Unlock Alignment</button>
+    <button class="ctrl-btn" id="gyroBtn">Gyroscope On</button>
   </div>
   <div id="instructions">
     <b>How to align:</b><br>
@@ -34,7 +35,8 @@
       <li>Drag with one finger to rotate the rendering</li>
       <li>Pinch/expand with two fingers to zoom in/out</li>
       <li>Tap Lock/Unlock to toggle manual alignment</li>
-      <li>Gyroscope follows device movement after locking</li>
+      <li>Tap Gyroscope On/Off any time</li>
+      <li>Ghost Mode: see-through rendering overlay</li>
     </ul>
   </div>
   <!-- WebGL alpha enabled for transparent background -->
@@ -59,41 +61,50 @@
       alert('Camera API not supported.');
     }
 
-    // Set up references
+    // Setup references
     const params = new URLSearchParams(location.search);
     const imgSrc = params.get("img") || "images/360-1.jpg";
     const skyEl = document.getElementById("sky360");
     skyEl.setAttribute("material", "src", imgSrc);
     skyEl.setAttribute("material", "opacity", 1);
 
-    // Ghost Mode Opacity Control: Enables AR "see-through" effect
+    // Ghost Mode Opacity Control
     document.getElementById("ghostToggle").addEventListener("input", function(e) {
       skyEl.setAttribute('material', 'opacity', parseFloat(e.target.value));
     });
 
-    // Alignment controls (lock/unlock)
+    // Gyroscope toggle logic
+    const gyroBtn = document.getElementById("gyroBtn");
+    const cameraEl = document.getElementById("mainCamera");
+    let gyroActive = false;
+    function updateGyroButton() {
+      gyroBtn.textContent = gyroActive ? "Gyroscope Off" : "Gyroscope On";
+    }
+    gyroBtn.addEventListener("click", function() {
+      gyroActive = !gyroActive;
+      cameraEl.setAttribute("look-controls", `enabled: ${gyroActive}; touchEnabled: false;`);
+      updateGyroButton();
+    });
+    updateGyroButton();
+
+    // Alignment controls (lock/unlock) - gestures always allowed
     let controlsLocked = false;
     const lockBtn = document.getElementById("lockAlign");
     const unlockBtn = document.getElementById("unlockAlign");
-    const cameraEl = document.getElementById("mainCamera");
 
     lockBtn.addEventListener("click", function() {
       controlsLocked = true;
       lockBtn.disabled = true;
       unlockBtn.disabled = false;
-      // Enable gyroscope camera controls, disable manual gestures
-      cameraEl.setAttribute("look-controls", "enabled: true; touchEnabled: false;");
-      alert("Alignment locked! Now move your phone to view the design with gyroscope.");
+      alert("Alignment locked! Continue viewing with gyroscope or gestures.");
     });
     unlockBtn.addEventListener("click", function() {
       controlsLocked = false;
       lockBtn.disabled = false;
       unlockBtn.disabled = true;
-      // Disable gyro camera controls, re-enable gestures
-      cameraEl.setAttribute("look-controls", "enabled: false;");
     });
 
-    // --- Mobile Gesture Logic for Rotation and Zoom --- //
+    // Mobile gestures: pinch/expend = zoom in/out (natural direction), drag = rotate
     let lastTouchX = null, lastRotationY = 0;
     let initialPinchDist = null, initialScale = -1;
     let sphereScale = -1;   // Start at -1 for correct orientation
@@ -128,14 +139,14 @@
         skyEl.setAttribute("rotation", `0 ${rotationY} 0`);
         lastTouchX = e.touches[0].clientX;
       }
-      // Two fingers: pinch zoom in/out
+      // Two fingers: pinch/expand (zoom out/in)
       if (e.touches.length === 2 && initialPinchDist!==null) {
         let newDist = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
         );
         let scaleFactor = newDist / initialPinchDist;
-        sphereScale = safeScale(initialScale * scaleFactor);
+        sphereScale = safeScale(initialScale * scaleFactor); // Expanding = bigger, Pinch = smaller
         skyEl.setAttribute("scale", `${sphereScale} 1 1`);
       }
     });
