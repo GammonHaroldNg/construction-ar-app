@@ -95,6 +95,9 @@
       controlsLocked = true;
       lockBtn.disabled = true;
       unlockBtn.disabled = false;
+      if (video && typeof video.play === "function") {
+        video.play();
+      }
       alert("Alignment locked! Continue viewing with gyroscope or gestures.");
     });
     unlockBtn.addEventListener("click", function() {
