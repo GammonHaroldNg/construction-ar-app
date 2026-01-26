@@ -11,23 +11,44 @@ const map = new mapboxgl.Map({
 
 // Overlay a site plan image (adjust coordinates as needed)
 map.on('load', () => {
-  map.addSource('site', {
+  // Lobby plan
+  map.addSource('plan-lobby', {
     'type': 'image',
-    'url': 'images/GT-Core-Plan.png',
+    'url': 'images/GT-Core-Plan.png',     // existing lobby plan
     'coordinates': [
-      [114.1085, 22.3972], // top left (lng, lat)
-      [114.1105, 22.3972], // top right
-      [114.1105, 22.3956], // bottom right
-      [114.1085, 22.3956]  // bottom left
+      [114.1085, 22.3972],
+      [114.1105, 22.3972],
+      [114.1105, 22.3956],
+      [114.1085, 22.3956]
     ]
   });
   map.addLayer({
-    'id': 'site',
+    'id': 'plan-lobby',
     'type': 'raster',
-    'source': 'site',
+    'source': 'plan-lobby',
     'paint': { 'raster-opacity': 0.85 }
   });
+
+  // Facade plan
+  map.addSource('plan-facade', {
+    'type': 'image',
+    'url': 'images/siteplan.png',      // <-- your facade plan image
+    'coordinates': [
+      [114.1085, 22.3972],                // <-- set correct bounds for facade
+      [114.1105, 22.3972],
+      [114.1105, 22.3956],
+      [114.1085, 22.3956]
+    ]
+  });
+  map.addLayer({
+    'id': 'plan-facade',
+    'type': 'raster',
+    'source': 'plan-facade',
+    'paint': { 'raster-opacity': 0.85 },
+    'layout': { 'visibility': 'none' }    // start hidden
+  });
 });
+
 
 // Preset markers for 360 locations
 const presetMarkers = [
@@ -36,42 +57,54 @@ const presetMarkers = [
     image: 'images/3F-Lobby-A.png',
     thumbnail: 'images/thumb-Lobby-A.png',
     label: 'Lobby 1'
+    plan: 'lobby'
   },
   {
     lngLat: [114.10915, 22.3960],
     image: 'images/3F-Lobby-D.png',
     thumbnail: 'images/thumb-Lobby-D.png',
     label: 'Lobby 3'
+    plan: 'lobby'
   },
   {
     lngLat: [114.10965, 22.3967],
     image: 'images/3F-Lobby-B.png',
     thumbnail: 'images/thumb-Lobby-B.png',
     label: 'Lobby 2'
+    plan: 'lobby'
   },
   {
     lngLat: [114.10965, 22.3960],
     image: 'images/3F-Lobby-C.png',
     thumbnail: 'images/thumb-Lobby-C.png',
     label: 'Lobby 4'
+    plan: 'lobby'
   },
     {
     lngLat: [114.10970, 22.3955],
     image: 'images/3F-06.png',
     label: 'Floor Platten'
+    plan: 'lobby'
   },
     {
     lngLat: [114.10975, 22.3955],
     image: 'images/QRC-Facade-Day.png',
     label: 'QRC Facade Day Time'
+    plan: 'facade'
   },
     {
     lngLat: [114.10980, 22.3955],
     image: 'images/QRC-Facade-Night.png',
     label: 'QRC Facade Night Time'
+    plan: 'facade'
   }
 
 ];
+
+const markersByPlan = {
+  lobby: [],
+  facade: []
+};
 
 // Add preset markers and popups
 presetMarkers.forEach(markerData => {
@@ -82,14 +115,16 @@ presetMarkers.forEach(markerData => {
   const popupContent = `
     <div style="text-align:center;">
       <strong>${markerData.label}</strong><br>
-      <img src="${markerData.thumbnail}" alt="thumbnail" width="120" style="margin:8px 0;display:block;" />
+      ${markerData.thumbnail ? `<img src="${markerData.thumbnail}" alt="thumbnail" width="120" style="margin:8px 0;display:block;" />` : ''}
       <a href="viewer.html?img=${encodeURIComponent(markerData.image)}" target="_blank">
-      <button>View 360</button>
+        <button>View 360</button>
       </a>
     </div>
   `;
   const popup = new mapboxgl.Popup().setHTML(popupContent);
   marker.setPopup(popup);
+
+  markersByPlan[markerData.plan].push(marker);
 
   marker._imageFileName = markerData.image;
   marker.getElement().addEventListener('click', () => {
@@ -230,4 +265,31 @@ aScene.addEventListener('touchmove', function(e){
 aScene.addEventListener('touchend', function(e){
   lastTouchX = null;
   initialPinchDist = null;
+});
+
+function setPlan(planName) {
+  // Switch raster plans
+  map.setLayoutProperty('plan-lobby', 'visibility', planName === 'lobby' ? 'visible' : 'none');
+  map.setLayoutProperty('plan-facade', 'visibility', planName === 'facade' ? 'visible' : 'none');
+
+  // Show relevant markers
+  ['lobby', 'facade'].forEach(p => {
+    markersByPlan[p].forEach(m => {
+      const el = m.getElement();
+      el.style.display = (p === planName) ? 'block' : 'none';
+    });
+  });
+
+  // Update button state
+  document.getElementById('btnLobby').classList.toggle('active', planName === 'lobby');
+  document.getElementById('btnFacade').classList.toggle('active', planName === 'facade');
+}
+
+// Hook up buttons once DOM is ready
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btnLobby').addEventListener('click', () => setPlan('lobby'));
+  document.getElementById('btnFacade').addEventListener('click', () => setPlan('facade'));
+
+  // default view = lobby plan
+  setPlan('lobby');
 });
