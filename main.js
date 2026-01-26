@@ -86,17 +86,29 @@ const presetMarkers = [
     plan: 'lobby'   // or 'facade' if it belongs to facade
   },
   {
-    lngLat: [114.10975, 22.3955],
+    lngLat: [114.10945, 22.3955],
     image: 'images/QRC-Facade-Day.png',
-    label: 'QRC Facade Day Time',
+    label: 'QRC Facade Day Time Location 1',
+    plan: 'facade'
+  },
+  {
+    lngLat: [114.10950, 22.3955],
+    image: 'images/QRC-Facade-Night.png',
+    label: 'QRC Facade Night Time Location 1',
+    plan: 'facade'
+  },
+  {
+    lngLat: [114.10975, 22.3955],
+    image: 'images/QRC-Facade-Day 2.png',
+    label: 'QRC Facade Day Time Location 2',
     plan: 'facade'
   },
   {
     lngLat: [114.10980, 22.3955],
-    image: 'images/QRC-Facade-Night.png',
-    label: 'QRC Facade Night Time',
+    image: 'images/QRC-Facade-Night 2.png',
+    label: 'QRC Facade Day Time Location 2',
     plan: 'facade'
-  }
+  },
 ];
 
 // Store markers by plan
