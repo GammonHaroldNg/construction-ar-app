@@ -106,7 +106,7 @@ const presetMarkers = [
   {
     lngLat: [114.10980, 22.3955],
     image: 'images/QRC-Facade-Night 2.png',
-    label: 'QRC Facade Day Time Location 2',
+    label: 'QRC Facade Night Time Location 2',
     plan: 'facade'
   },
 ];
