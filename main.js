@@ -56,46 +56,46 @@ const presetMarkers = [
     lngLat: [114.10915, 22.3967],
     image: 'images/3F-Lobby-A.png',
     thumbnail: 'images/thumb-Lobby-A.png',
-    label: 'Lobby 1'
+    label: 'Lobby 1',
     plan: 'lobby'
   },
   {
     lngLat: [114.10915, 22.3960],
     image: 'images/3F-Lobby-D.png',
     thumbnail: 'images/thumb-Lobby-D.png',
-    label: 'Lobby 3'
+    label: 'Lobby 3',
     plan: 'lobby'
   },
   {
     lngLat: [114.10965, 22.3967],
     image: 'images/3F-Lobby-B.png',
     thumbnail: 'images/thumb-Lobby-B.png',
-    label: 'Lobby 2'
+    label: 'Lobby 2',
     plan: 'lobby'
   },
   {
     lngLat: [114.10965, 22.3960],
     image: 'images/3F-Lobby-C.png',
     thumbnail: 'images/thumb-Lobby-C.png',
-    label: 'Lobby 4'
+    label: 'Lobby 4',
     plan: 'lobby'
   },
     {
     lngLat: [114.10970, 22.3955],
     image: 'images/3F-06.png',
-    label: 'Floor Platten'
+    label: 'Floor Platten',
     plan: 'lobby'
   },
     {
     lngLat: [114.10975, 22.3955],
     image: 'images/QRC-Facade-Day.png',
-    label: 'QRC Facade Day Time'
+    label: 'QRC Facade Day Time',
     plan: 'facade'
   },
     {
     lngLat: [114.10980, 22.3955],
     image: 'images/QRC-Facade-Night.png',
-    label: 'QRC Facade Night Time'
+    label: 'QRC Facade Night Time',
     plan: 'facade'
   }
 
