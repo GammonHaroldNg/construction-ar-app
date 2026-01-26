@@ -40,11 +40,39 @@ html, body {
   width: auto;
 }
 
+#planToggle {
+  position: fixed;
+  top: 60px;           /* just under the top banner */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: rgba(3, 48, 70, 0.9);
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.plan-btn {
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #033046;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.plan-btn.active {
+  background: #1274AA;
+  color: #ffffff;
+}
+
 #map {
   position: fixed;
-  top: 60px;
+  top: 100px;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 120px); /* 60px for each banner */
+  height: calc(100vh - 160px); /* 60px for each banner */
   z-index: 1;
 }
