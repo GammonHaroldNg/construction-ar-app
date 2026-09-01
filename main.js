@@ -1,5 +1,7 @@
-// Replace with your own free Mapbox access token!
-mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyb2xkbmciLCJhIjoiY21ncTRkcG9wMDE5NTJqcHhmMDUzYWxmNSJ9.5clGvHOhvwTRx2z9lwNAkA';
+if (!window.MAPBOX_ACCESS_TOKEN || window.MAPBOX_ACCESS_TOKEN === 'YOUR_MAPBOX_PUBLIC_TOKEN_HERE') {
+  alert('Mapbox token missing. Copy config.example.js to config.js and add your public access token.');
+}
+mapboxgl.accessToken = window.MAPBOX_ACCESS_TOKEN;
 
 // Initialize the map - show only the overlay image
 const map = new mapboxgl.Map({
@@ -109,12 +111,20 @@ const presetMarkers = [
     label: 'QRC Facade Night Time Location 2',
     plan: 'facade'
   },
+  {
+    lngLat: [114.10940, 22.39625],
+    image: 'images/Exchange.png',
+    thumbnail: 'images/Exchange.png',
+    label: 'Exchange',
+    plan: 'exchange'
+  },
 ];
 
 // Store markers by plan
 const markersByPlan = {
   lobby: [],
-  facade: []
+  facade: [],
+  exchange: []
 };
 
 // Create markers and popups
@@ -140,12 +150,12 @@ presetMarkers.forEach(markerData => {
 
 // Switch plans
 function setPlan(planName) {
-  // Switch raster plans
+  // Switch raster plans (exchange has no plan overlay yet)
   map.setLayoutProperty('plan-lobby', 'visibility', planName === 'lobby' ? 'visible' : 'none');
   map.setLayoutProperty('plan-facade', 'visibility', planName === 'facade' ? 'visible' : 'none');
 
   // Show relevant markers
-  ['lobby', 'facade'].forEach(p => {
+  ['lobby', 'facade', 'exchange'].forEach(p => {
     markersByPlan[p].forEach(m => {
       const el = m.getElement();
       el.style.display = (p === planName) ? 'block' : 'none';
@@ -155,16 +165,19 @@ function setPlan(planName) {
   // Update button UI
   document.getElementById('btnLobby').classList.toggle('active', planName === 'lobby');
   document.getElementById('btnFacade').classList.toggle('active', planName === 'facade');
+  document.getElementById('btnExchange').classList.toggle('active', planName === 'exchange');
 }
 
 // Wire buttons AFTER DOM is ready
 window.addEventListener('DOMContentLoaded', () => {
   const btnLobby = document.getElementById('btnLobby');
   const btnFacade = document.getElementById('btnFacade');
+  const btnExchange = document.getElementById('btnExchange');
 
-  if (btnLobby && btnFacade) {
+  if (btnLobby && btnFacade && btnExchange) {
     btnLobby.addEventListener('click', () => setPlan('lobby'));
     btnFacade.addEventListener('click', () => setPlan('facade'));
+    btnExchange.addEventListener('click', () => setPlan('exchange'));
   }
 
   // default = lobby
@@ -299,29 +312,3 @@ aScene.addEventListener('touchend', function(e){
   initialPinchDist = null;
 });
 
-function setPlan(planName) {
-  // Switch raster plans
-  map.setLayoutProperty('plan-lobby', 'visibility', planName === 'lobby' ? 'visible' : 'none');
-  map.setLayoutProperty('plan-facade', 'visibility', planName === 'facade' ? 'visible' : 'none');
-
-  // Show relevant markers
-  ['lobby', 'facade'].forEach(p => {
-    markersByPlan[p].forEach(m => {
-      const el = m.getElement();
-      el.style.display = (p === planName) ? 'block' : 'none';
-    });
-  });
-
-  // Update button state
-  document.getElementById('btnLobby').classList.toggle('active', planName === 'lobby');
-  document.getElementById('btnFacade').classList.toggle('active', planName === 'facade');
-}
-
-// Hook up buttons once DOM is ready
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btnLobby').addEventListener('click', () => setPlan('lobby'));
-  document.getElementById('btnFacade').addEventListener('click', () => setPlan('facade'));
-
-  // default view = lobby plan
-  setPlan('lobby');
-});
