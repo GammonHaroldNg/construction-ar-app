@@ -15,7 +15,41 @@
     a-scene { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; background: transparent !important;}
     .ctrl-btn { font-size: 1.1em; padding: 6px 14px; border-radius: 4px; background: #274AA1; color: white; border: none; cursor: pointer; }
     .ctrl-btn:disabled { background: #888; cursor: default; }
-    #instructions { position: absolute; bottom: 25px; left: 20px; z-index: 2; color: #fff; background:rgba(0,0,0,0.5); padding:8px 15px; border-radius:6px; font-size:1em; }
+    #instructions {
+      position: absolute;
+      bottom: 25px;
+      left: 20px;
+      z-index: 10;
+      color: #fff;
+      background: rgba(0,0,0,0.55);
+      padding: 10px 36px 10px 15px;
+      border-radius: 6px;
+      font-size: 1em;
+      max-width: min(340px, calc(100vw - 48px));
+    }
+    #instructions.hidden { display: none; }
+    #instructions ul { margin: 6px 0 0; padding-left: 18px; }
+    #closeInstructions {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      font-size: 1.3em;
+      line-height: 1;
+      cursor: pointer;
+    }
+    #helpBtn {
+      position: absolute;
+      bottom: 25px;
+      left: 20px;
+      z-index: 10;
+    }
+    #helpBtn.hidden { display: none; }
   </style>
 </head>
 <body>
@@ -30,7 +64,8 @@
     <button class="ctrl-btn" id="gyroBtn">Gyroscope On</button>
   </div>
   <div id="instructions">
-    <b>How to align:</b><br>
+    <button type="button" id="closeInstructions" aria-label="Close tutorial">&times;</button>
+    <b>How to align:</b>
     <ul>
       <li>Drag with one finger to rotate left/right AND up/down</li>
       <li>Pinch/expand with two fingers to zoom in/out</li>
@@ -39,6 +74,7 @@
       <li>Ghost Mode: see-through rendering overlay</li>
     </ul>
   </div>
+  <button type="button" class="ctrl-btn hidden" id="helpBtn">Help</button>
   <a-scene embedded vr-mode-ui="enabled: false" renderer="alpha:true;">
     <a-entity 
       id="sky360"
@@ -164,6 +200,33 @@
       lastTouchY = null;
       initialPinchDist = null;
     });
+
+    // Tutorial note: closable, remembered so it stays off after dismiss
+    const INSTRUCTIONS_KEY = 'arViewerHideInstructions';
+    const instructionsEl = document.getElementById('instructions');
+    const closeInstructionsBtn = document.getElementById('closeInstructions');
+    const helpBtn = document.getElementById('helpBtn');
+
+    function setInstructionsVisible(visible) {
+      instructionsEl.classList.toggle('hidden', !visible);
+      helpBtn.classList.toggle('hidden', visible);
+      if (visible) {
+        localStorage.removeItem(INSTRUCTIONS_KEY);
+      } else {
+        localStorage.setItem(INSTRUCTIONS_KEY, '1');
+      }
+    }
+
+    closeInstructionsBtn.addEventListener('click', function() {
+      setInstructionsVisible(false);
+    });
+    helpBtn.addEventListener('click', function() {
+      setInstructionsVisible(true);
+    });
+
+    if (localStorage.getItem(INSTRUCTIONS_KEY) === '1') {
+      setInstructionsVisible(false);
+    }
   </script>
 </body>
 </html>
